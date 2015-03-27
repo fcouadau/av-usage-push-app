@@ -1,0 +1,26 @@
+{
+  "name": "av-usage-push-app",
+  "author": "François Couadau <fcouadau@sierrawireless.com)",
+  "homepage": "http://airvantage.github.io",
+  "description": "Node.JS gateway to push usage data from an MNO into AirVantage",
+  "version": "0.0.1",
+  "bin" : "./bin/av-usage-push-app",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "config": "*",
+    "underscore": "*",
+    "bl": "*",
+    "node-schedule": "*",
+    "winston": "*"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "repository" : {
+        "type" : "git",
+        "url" : "git://github.com/AirVantage/av-usage-push-app.git"
+  },
+  "bugs": {"url": "http://github.com/AirVantage/av-usage-push-app/issues"}
+}

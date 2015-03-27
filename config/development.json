@@ -1,0 +1,14 @@
+{
+  "read_push_interval": 60,
+  "airvantage": {
+    "av_url": "na.airvantage.net",
+    "email": "CHANGE_IT",
+    "pass": "CHANGE_IT",
+    "client_id": "CHANGE_IT",
+    "client_secret": "CHANGE_IT",
+    "company": "CHANGE_IT"
+  },
+  "mno": {
+    "implementation": "stub_mno_api"
+  }
+}
