@@ -9,8 +9,10 @@ var log = util.getLogger();
 var av_token = null;
 var last_successful_timestamp = null;
 
-/*
+/**
  * Generates an AirVantage authentication token and schedules its cyclic re-generation.
+ *
+ * @param callback - Optional callback. Called in case of success only.
  */
 function gen_av_token(callback) {
   log.info('Generating AirVantage access token');
@@ -28,8 +30,9 @@ function gen_av_token(callback) {
   });
 }
 
-/*
- * Schedules read_push_cycle to be executed
+/**
+ * Schedules read_push_cycle to be executed.
+ *
  * @param now - if true, the cycle will be immediately executed.
  * @param cust_message - custom message to be displayed in the logs before the standard output.
  */
@@ -39,8 +42,9 @@ function schedule_read_push(now, cust_message) {
   return setTimeout(read_push_cycle, interval * 60000);
 }
 
-/*
- * Reads data from the MNO's systems and pushes it into AirVantage
+/**
+ * Reads data from the MNO's systems and pushes it into AirVantage.
+ * Schedules the next read/push cycle, either in read_push_interval minutes, or immediately (if data are still pending).
  */
 function read_push_cycle() {
   log.info('Starting read/push cycle')
