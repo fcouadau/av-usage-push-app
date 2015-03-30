@@ -1,19 +1,11 @@
 // Module dependencies
 var config = require('config');
 var sched = require('node-schedule');
-var winston = require('winston');
+var util = require('./lib/util.js');
 var av_api = require('./lib/airvantage_api');
 var mno_api = require('./lib/' + config.get('mno.implementation'));
 
-// Configure logging
-var NODE_ENV = process.env['NODE_ENV'] || 'development'
-var log = new (winston.Logger)({
-  transports: [
-    new (winston.transports.Console)({ json: false, colorize: true }),
-    new (winston.transports.DailyRotateFile)({ json: false, filename: 'log/' + NODE_ENV + '.log' })
-  ]
-});
-
+var log = util.getLogger();
 var av_token = null;
 var last_successful_timestamp = null;
 

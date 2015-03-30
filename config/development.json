@@ -1,5 +1,6 @@
 {
-  "read_push_interval": 60,
+  "debug_logs": true,
+  "read_push_interval": 1440,
   "airvantage": {
     "av_url": "na.airvantage.net",
     "email": "CHANGE_IT",
