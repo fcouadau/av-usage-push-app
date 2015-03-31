@@ -7,7 +7,7 @@ var mno_api = require('./lib/' + config.get('mno.implementation'));
 
 var log = util.getLogger();
 var av_token = null;
-var last_successful_timestamp = null;
+last_successful_timestamp = null;
 
 /**
  * Generates an AirVantage authentication token and schedules its cyclic re-generation.
@@ -49,7 +49,7 @@ function schedule_read_push(now, cust_message) {
 function read_push_cycle() {
   log.info('Starting read/push cycle')
   // Extract usages from the MNO's platform
-  mno_api.extract_usages(this.last_successful_timestamp, function(err, timestamp, data, records, finished) {
+  mno_api.extract_usages(last_successful_timestamp, function(err, timestamp, data, records, finished) {
     if(err) {
       log.error('Error extracting records: ' + err);
       schedule_read_push();
@@ -64,8 +64,12 @@ function read_push_cycle() {
           log.error('Error pushing usage data into AirVantage: %s', err);
         } else {
           log.info('%s records pushed successfully. Operation UID: %s', records, data['operation']);
-          last_successful_timestamp = timestamp;
+          // Store latest timestamp, if provided.
+          if (timestamp) {
+            last_successful_timestamp = timestamp;
+          }
         }
+
 
         // Schedule next push cycle
         if (finished) {
@@ -86,7 +90,7 @@ log.info('*******************************');
 // Log into AirVantage
 gen_av_token(function() {
   // Retrieve last successful timestamp
-  this.last_successful_timestamp = new Date().getTime(); // TODO retrieve from a database / conf. file
+  last_successful_timestamp = new Date().getTime(); // TODO retrieve from a database / conf. file
 
   // Initiate first read/push cycle
   schedule_read_push(true, 'Startup complete');
