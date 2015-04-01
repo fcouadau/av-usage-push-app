@@ -1,100 +1,55 @@
-AVEP Generic demo
-=================
+AirVantage usage push application
+=================================
 
-This application is a generic tool to demonstrate AirVantage Entreprise Platform (AVEP) to potential prospects.
+This application is a sample to demonstrate reading usage records from a Mobile Network Operator's platform, and pushing them into AirVantage.
 
-It plugs on any AirVantage environment, using any valid AirVantage account. Login is deferred to the selected AirVantage instance. Once logged in, the user can customize the look & feel of the application (logo, color, labels, etc). They can then display a dashboard showing their customized app.
+It plugs into AirVantage using a valid user account. The user account must have the `entities.systems.usages.create` right, or else pushing won't work.
 
-The application works best with an AVEP demo kit, comprised of an LX/GX device paired with a button/LED and running a specific program.
-
-Features
+Modules
 --------
 
-The application is composed of several screens:
+The application does not have any UI. It is composed of several modules:
 
-* Login: defers authentication to a user-selected AirVantage instance.
-* Dashboard: displays the state and data of the currently-selected system. When an alert is detected on the device, the dashboard updates accordingly, and a single alert SMS can be sent out.
-* Configure: provides a way of configuring the monitored system, the look & feel of the application, a phone number & text for the alert SMS, and the monitored system data.
-* Code insight: if the public is a bit technical in nature, this screen shows how AirVantage API queries are made and what kind of raw results they return, using a chart as an example.
+* `app.js`: Main entry point of the application.
+* `lib/util.js`: Utility functions.
+* `lib/airvantage_api.js`: functions to talk to AirVantage's APIs (and more specifically push usage data).
+* `lib/stub_mno_api.js`: functions to read usage data from an MNO's APIs.
 
 Installing & running
 --------------------
 
 To run the application:
 
-* Open file `airvantage.yml`. Update it with API client IDs and secrets for each environment.
-* Open file `twilio.yml`. Update it with your Twilio credentials for each environment.
-* Launch the application using rails.
-* You can access the application at: `http://localhost:3000` and login with your AirVantage credentials.
+* Open file `config/development.json`. Update it with your credentials.
+* Launch the application using `npm start`.
+* Traces will be generated in the console and in `log/development.log.2015-03-27`.
 
 Implementing your own MNO
 -------------------------
 
-TODO
+To implement a specific MNO's platform.
 
-Database
---------
-
-TODO
-
-Modules
--------
-
-The following modules are present:
-
-* `application_controller.rb`: Handles security by redirecting users to the login page if they are not authenticated.
-* `login_controller.rb`: Handles login (deferred to AirVantage using Resource Owner Flow) and logout.
-* `dashboard_controller.rb`: Handles dashboard display.
-* `configurations_controller.rb`: Handles configuration display, edition and storage.
-* `code_insight_controller.rb`: Handles code insight page display.
-* `sms_controller.rb`: Handles SMS sending (using Twilio). Triggered by the dashboard view when an alert is detected.
-
-Tests
------
-
-TODO
+* Open folder `lib`. Copy file `stub_mno_api.js` and rename it `your_mno_api.js`.
+* Implement the `extract_usages` method, as indicated in the comments.
+* In `config/development.json`, set parameter `mno.implementation` to the file name you chose, minus the extension (e.g. `your_mno_api`).
+* Test your app with `npm start`.
 
 Deploying in production
 -----------------------
 
-The following steps should allow you to install the app on a brand new Amazon EC2 t2.micro instance. The app is deployed within a standalone Puma server (no Apache/NGINX) using a self-signed SSL certificate.
+The following steps should allow you to install the app on a brand new Amazon EC2 t2.micro instance.
 
 #### Machine installation
 * Create a new Amazon EC2 t2.micro instance.
-* Make sure the instance allows inbound SSH (port `22`) from your machine, as well as inbound HTTP (port `80`) and HTTPS (port `443`) from anywhere.
+* Make sure the instance allows inbound SSH (port `22`) from your machine.
 * SSH into the machine and run the following commands:
-    * `sudo apt-get update`
-    * `sudo apt-get install ruby-railties-4.0`
-    * `sudo apt-get install ruby1.9.1-dev`
-    * `sudo apt-get install make`
-    * `sudo apt-get install libssl-dev`
-    * `sudo apt-get install libsqlite3-dev`
-    * `sudo apt-get install g++`
+    * `sudo apt-get nodejs`
 
 #### Basic configuration
-* Retrieve the webapp folder on the machine using the means of your choice (Git, zip file upload, etc).
-* Open file `config/airvantage.yml`. Update it with API client IDs and secrets for each environment.
-* Open file `config/twilio.yml`. Update it with your Twilio credentials for each environment.
-
-#### Gem installation
-* Set rails environment to production with `export RAILS_ENV=production`
-* Run `gem install bundler`.
-* Run `bundle install`.
-
-#### Database
-* Run `bundle exec rake db:setup`.
-* Run `bundle exec rake db:migrate`.
-* Run `rake secret`. Copy the output and paste it into file `config/secrets.yml`, under `:production`.
-* Run `rake assets:precompile`.
-
-#### Certificate generation
-* Create a directory for the certificate with `mkdir /bin/ssl && cd /bin/ssl`.
-* Generate the self-signed certificate: `openssl req -new -newkey rsa:2048 -sha1 -days 365 -nodes -x509 -keyout server.key -out server.crt Generating a 2048 bit RSA private key`.
-* Fill in the questions. Two files will be generated: `server.key` and `server.crt`.
+* Retrieve your webapp folder on the machine using the means of your choice (Git, zip file upload, etc).
+* Make sure your MNO-specific implementation is present in the `lib` folder.
+* Open file `config/production.json`. Update it with your AirVantage credentials. Make sure `mno.implementation` is set to your MNO. Add your MNO-specific configuration as needed.
 
 #### Server start
-* Launch Puma with `sudo puma -d -e production -p 80 -b 'ssl://0.0.0.0:443?key=/bin/ssl/server.key&cert=/bin/ssl/server.crt'`.
-* You can access the application at: `https://<Amazon_machine_public_DNS>` and login with your AirVantage credentials.
-* Notes:
-    * On your first access, you'll have to accept the self-signed certificate.
-    * This configuration allows access using both HTTP (port`80`) and HTTPS (port `443`). There is an automatic redirect to HTTPS.
+* Launch the application with `npm start`.
+* You can access the logs in the console and the `log` folder.
