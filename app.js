@@ -49,35 +49,34 @@ function schedule_read_push(now, cust_message) {
 function read_push_cycle() {
   log.info('Starting read/push cycle')
   // Extract usages from the MNO's platform
-  mno_api.extract_usages(last_successful_timestamp, function(err, timestamp, data, records, finished) {
+  mno_api.extract_usages(last_successful_timestamp, function(err, timestamp, csv, nb_lines, finished) {
     if(err) {
       log.error('Error extracting records: ' + err);
-      schedule_read_push();
     }
 
-    log.info('%s records extracted (finished: %s), most recent timestamp is %s', records, finished, timestamp);
+    log.info('%s records extracted (finished: %s), most recent timestamp is %s', nb_lines, finished, timestamp);
 
     // Push data into AirVantage
-    if (records > 0) {
-      av_api.push_usage_data(config.get('airvantage.av_url'), config.get('airvantage.company'), data, this.av_token, function(err, data) {
+    if (nb_lines > 0) {
+      av_api.push_usage_data(config.get('airvantage.av_url'), config.get('airvantage.company'), csv, this.av_token, function(err, data) {
         if(err) {
           log.error('Error pushing usage data into AirVantage: %s', err);
         } else {
-          log.info('%s records pushed successfully. Operation UID: %s', records, data['operation']);
-          // Store latest timestamp, if provided.
-          if (timestamp) {
-            last_successful_timestamp = timestamp;
-          }
-        }
-
-
-        // Schedule next push cycle
-        if (finished) {
-          schedule_read_push();
-        } else {
-          schedule_read_push(true, 'More usage data are pending');
+          log.info('%s records pushed successfully. Operation UID: %s', nb_lines, data['operation']);
         }
       });
+    }
+
+    // Store latest timestamp, if provided.
+    if (timestamp) {
+      last_successful_timestamp = timestamp;
+    }
+
+    // Schedule next read-push cycle
+    if (finished) {
+      schedule_read_push();
+    } else {
+      schedule_read_push(true, 'More usage data are pending');
     }
   });
 }
