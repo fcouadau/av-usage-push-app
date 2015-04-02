@@ -1,5 +1,6 @@
 {
   "debug_logs": true,
+  "start_timestamp": null,
   "read_push_interval": 1440,
   "airvantage": {
     "av_url": "na.airvantage.net",

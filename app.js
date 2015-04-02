@@ -53,7 +53,6 @@ function read_push_cycle() {
     if(err) {
       log.error('Error extracting records: ' + err);
     }
-
     log.info('%s records extracted (finished: %s), most recent timestamp is %s', nb_lines, finished, timestamp);
 
     // Push data into AirVantage
@@ -86,11 +85,12 @@ log.info('Starting Usage push application');
 log.info('Using MNO API: %s', JSON.stringify(config.get('mno.implementation'), null, 2));
 log.info('*******************************');
 
+// Retrieve last successful timestamp
+last_successful_timestamp = config.get('start_timestamp') || new Date().getTime();
+log.info('Using start timestamp: ' + last_successful_timestamp);
+
 // Log into AirVantage
 gen_av_token(function() {
-  // Retrieve last successful timestamp
-  last_successful_timestamp = new Date().getTime(); // TODO retrieve from a database / conf. file
-
   // Initiate first read/push cycle
   schedule_read_push(true, 'Startup complete');
 });

@@ -12,8 +12,9 @@ The application does not have any UI. It is composed of several modules:
 
 * `app.js`: Main entry point of the application.
 * `lib/util.js`: Utility functions.
-* `lib/airvantage_api.js`: functions to talk to AirVantage's APIs (and more specifically push usage data).
-* `lib/stub_mno_api.js`: functions to read usage data from an MNO's APIs.
+* `lib/airvantage_api.js`: Talks to AirVantage's APIs (and more specifically push usage data).
+* `lib/empty_mno_api.js`: Empty shell showcasing the usage read function.
+* `lib/stub_mno_api.js`: Stub implementation of `empty_mno_api.js`. Demonstrates a simple, stubbed construction of an AV-compatible CSV.
 
 Installing & running
 --------------------
@@ -29,9 +30,9 @@ Implementing your own MNO
 
 To implement a specific MNO's platform.
 
-* Open folder `lib`. Copy file `stub_mno_api.js` and rename it `your_mno_api.js`.
+* Open folder `lib`. Copy file `empty_mno_api.js` and rename it `<your_mno>_api.js`.
 * Implement the `extract_usages` method, as indicated in the comments.
-* In `config/development.json`, set parameter `mno.implementation` to the file name you chose, minus the extension (e.g. `your_mno_api`).
+* In `config/development.json`, set parameter `mno.implementation` to the file name you chose, minus the extension (e.g. `<your_mno>_api`).
 * Test your app with `npm start`.
 
 Deploying in production
