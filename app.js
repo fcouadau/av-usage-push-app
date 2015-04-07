@@ -68,6 +68,7 @@ function read_push_cycle() {
 
     // Store latest timestamp, if provided.
     if (timestamp) {
+      log.info('Updating last successful timestamp: ' + timestamp + ' / ' + new Date(timestamp));
       last_successful_timestamp = timestamp;
     }
 
@@ -87,7 +88,7 @@ log.info('*******************************');
 
 // Retrieve last successful timestamp
 last_successful_timestamp = config.get('start_timestamp') || new Date().getTime();
-log.info('Using start timestamp: ' + last_successful_timestamp);
+log.info('Using start timestamp: ' + last_successful_timestamp + ' / ' + new Date(last_successful_timestamp));
 
 // Log into AirVantage
 gen_av_token(function() {
