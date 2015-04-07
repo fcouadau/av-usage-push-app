@@ -22,6 +22,7 @@ Installing & running
 To run the application:
 
 * Open file `config/development.json`. Update it with your credentials.
+* Install dependencies using `npm install`.
 * Launch the application using `npm start`.
 * Traces will be generated in the console and in `log/development.log.2015-03-27`.
 
@@ -50,6 +51,7 @@ The following steps should allow you to install the app on a brand new Amazon EC
 * Retrieve your webapp folder on the machine using the means of your choice (Git, zip file upload, etc).
 * Make sure your MNO-specific implementation is present in the `lib` folder.
 * Open file `config/production.json`. Update it with your AirVantage credentials. Make sure `mno.implementation` is set to your MNO. Add your MNO-specific configuration as needed.
+* Install dependencies using `npm install`.
 
 #### Server start
 * Launch the application with `npm start`.
