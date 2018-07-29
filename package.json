@@ -9,10 +9,10 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "adm-zip": "0.4.7",
+    "adm-zip": "0.4.11",
     "bl": "0.9.4",
     "config": "1.12.0",
-    "moment": "2.9.0",
+    "moment": "2.19.3",
     "node-schedule": "0.2.6",
     "soap": "0.8.0",
     "underscore": "1.8.2",
