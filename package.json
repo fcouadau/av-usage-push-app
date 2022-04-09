@@ -12,7 +12,7 @@
     "adm-zip": "0.4.11",
     "bl": "4.0.3",
     "config": "1.12.0",
-    "moment": "2.19.3",
+    "moment": ">=2.29.2",
     "node-schedule": "0.2.6",
     "soap": "0.8.0",
     "underscore": ">=1.12.1",
